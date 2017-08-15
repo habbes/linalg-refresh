@@ -1,7 +1,15 @@
+"""
+vector module
+
+contains Vector class which
+encapsulates a basic implementation
+of vector operations
+"""
 import math
 from numbers import Number
 
 class Vector(object):
+    """Represents an n-dimentional vector"""
     def __init__(self, *coordinates):
         try:
             if not coordinates:
@@ -15,6 +23,37 @@ class Vector(object):
         except TypeError:
             raise TypeError('The coordinates must be an iterable')
 
+    def magnitude(self):
+        """Returns the magnitude of the vector"""
+        sum_sq = sum([x**2 for x in self.coordinates])
+        return math.sqrt(sum_sq)
+
+    def normalize(self):
+        """Computes the normalized version of this vector"""
+        return (1/abs(self)) * self
+
+    def scalar_mult(self, const):
+        """Performs a scalar multiplication"""
+        new_coords = [x * const for x in self.coordinates]
+        return Vector(*new_coords)
+
+    def dot(self, other):
+        """Computes the dot product"""
+        return sum([x * y for x, y in zip(self.coordinates, other.coodinates)])
+
+    def multiply(self, other):
+        """Performs scalar multiplication or dot
+        product depending on the type of other"""
+        if isinstance(other, Number):
+            return self.scalar_mult(other)
+        elif isinstance(other, Vector):
+            return self.dot(other)
+        raise TypeError
+    
+    def angle(self, other):
+        """Computes the angle between two vectors
+        acos(v dot w/||v||*||w||)"""
+        math.acos(self.normalize() / other.normalize())
 
     def __str__(self):
         return 'Vector: {}'.format(self.coordinates)
@@ -30,17 +69,7 @@ class Vector(object):
         new_coords = [x - y for x, y in zip(self.coordinates, other.coordinates)]
         return Vector(*new_coords)
 
-    def __rmul__(self, other):
-        if not isinstance(other, Number):
-            raise TypeError("Scalar multiplication requires a number")
-        new_coords = [x * other for x in self.coordinates]
-        return Vector(*new_coords)
-
-    def magnitude(self):
-        sum_sq = sum([x**2 for x in self.coordinates])
-        return math.sqrt(sum_sq)
-
     __abs__ = magnitude
+    __mul__ = multiply
+    __rmul__ = multiply
 
-    def normalize(self):
-        return (1/abs(self)) * self
