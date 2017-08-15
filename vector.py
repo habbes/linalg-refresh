@@ -116,10 +116,13 @@ class Vector(object):
         """Computes the cross product"""
         if self.dimension > 3 or other.dimension > 3:
             raise Exception("Cross product not supported beyond 3D")
+        # add 0 z-index in case of 2D vectors
+        v = self if self.dimension == 3 else Vector(*(self.coordinates + ('0',)))
+        w = other if other.dimension == 3 else Vector(*(other.coordinates + ('0',)))
         return Vector(
-            (self[1] * other[2]) - (self[2] * other[1]),
-            -((self[0] * other[2]) - (self[2] * other[0])),
-            (self[0] * other[1]) - (self[1] * other[0])
+            (v[1] * w[2]) - (v[2] * w[1]),
+            -((v[0] * w[2]) - (v[2] * w[0])),
+            (v[0] * w[1]) - (v[1] * w[0])
         )
 
     def parallelogram_area_with(self, other):
