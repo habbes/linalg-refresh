@@ -13,3 +13,4 @@ v = Vector(5.581, -2.136)
 print("Normalize", v, ":", v.normalize())
 v = Vector(1.996, 3.108, -4.554)
 print("Normalize", v, ":", v.normalize())
+

@@ -39,7 +39,7 @@ class Vector(object):
 
     def dot(self, other):
         """Computes the dot product"""
-        return sum([x * y for x, y in zip(self.coordinates, other.coodinates)])
+        return sum([x * y for x, y in zip(self.coordinates, other.coordinates)])
 
     def multiply(self, other):
         """Performs scalar multiplication or dot
@@ -49,11 +49,11 @@ class Vector(object):
         elif isinstance(other, Vector):
             return self.dot(other)
         raise TypeError
-    
+
     def angle(self, other):
         """Computes the angle between two vectors
         acos(v dot w/||v||*||w||)"""
-        math.acos(self.normalize() / other.normalize())
+        return math.acos(self.normalize() * other.normalize())
 
     def __str__(self):
         return 'Vector: {}'.format(self.coordinates)
@@ -72,4 +72,3 @@ class Vector(object):
     __abs__ = magnitude
     __mul__ = multiply
     __rmul__ = multiply
-
