@@ -7,6 +7,10 @@ of vector operations
 """
 import math
 from numbers import Number
+from decimal import Decimal, getcontext
+
+# 3 decimal places
+getcontext().prec = 30
 
 class Vector(object):
     """Represents an n-dimentional vector"""
@@ -14,7 +18,7 @@ class Vector(object):
         try:
             if not coordinates:
                 raise ValueError
-            self.coordinates = tuple(coordinates)
+            self.coordinates = tuple([Decimal(x) for x in coordinates])
             self.dimension = len(coordinates)
 
         except ValueError:
@@ -26,14 +30,15 @@ class Vector(object):
     def magnitude(self):
         """Returns the magnitude of the vector"""
         sum_sq = sum([x**2 for x in self.coordinates])
-        return math.sqrt(sum_sq)
+        return sum_sq.sqrt()
 
     def normalize(self):
         """Computes the normalized version of this vector"""
-        return (1/abs(self)) * self
+        return (Decimal(1)/abs(self)) * self
 
     def scalar_mult(self, const):
         """Performs a scalar multiplication"""
+        const = Decimal(const)
         new_coords = [x * const for x in self.coordinates]
         return Vector(*new_coords)
 
