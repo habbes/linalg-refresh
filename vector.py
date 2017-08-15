@@ -99,6 +99,17 @@ class Vector(object):
                 return False
         return True
 
+    def project_on(self, basis):
+        """Computes the projection of this vector
+        on the specified basis vector"""
+        u_basis = basis.normalize()
+        return (self * u_basis) * u_basis
+
+    def component_orthogonal_to(self, basis):
+        """Computes the vector component of self that
+        is orthogonal to the specified basis vector"""
+        return self - self.project_on(basis)
+
     def __str__(self):
         return 'Vector: {}'.format(self.coordinates)
 
