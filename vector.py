@@ -1,3 +1,4 @@
+import math
 from numbers import Number
 
 class Vector(object):
@@ -22,11 +23,11 @@ class Vector(object):
         return self.coordinates == v.coordinates
 
     def __add__(self, other):
-        new_coords = [x + y for x,y in zip(self.coordinates, other.coordinates)]
+        new_coords = [x + y for x, y in zip(self.coordinates, other.coordinates)]
         return Vector(*new_coords)
 
     def __sub__(self, other):
-        new_coords = [x - y for x,y in zip(self.coordinates, other.coordinates)]
+        new_coords = [x - y for x, y in zip(self.coordinates, other.coordinates)]
         return Vector(*new_coords)
 
     def __rmul__(self, other):
@@ -34,3 +35,12 @@ class Vector(object):
             raise TypeError("Scalar multiplication requires a number")
         new_coords = [x * other for x in self.coordinates]
         return Vector(*new_coords)
+
+    def magnitude(self):
+        sum_sq = sum([x**2 for x in self.coordinates])
+        return math.sqrt(sum_sq)
+
+    __abs__ = magnitude
+
+    def normalize(self):
+        return (1/abs(self)) * self
