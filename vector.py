@@ -22,18 +22,15 @@ class Vector(object):
         return self.coordinates == v.coordinates
 
     def __add__(self, other):
-        combined = self._combine_coords(other)
-        return Vector(*tuple(map(lambda x: x[0]+x[1], combined)))
+        new_coords = [x + y for x,y in zip(self.coordinates, other.coordinates)]
+        return Vector(*new_coords)
 
     def __sub__(self, other):
-        combined = self._combine_coords(other)
-        return Vector(*tuple(map(lambda x: x[0]-x[1], combined)))
+        new_coords = [x - y for x,y in zip(self.coordinates, other.coordinates)]
+        return Vector(*new_coords)
 
     def __rmul__(self, other):
         if not isinstance(other, Number):
             raise TypeError("Scalar multiplication requires a number")
-        return Vector(*tuple(map(lambda x: x * other, self.coordinates)))
-
-    def _combine_coords(self, other):
-        return zip(self.coordinates, other.coordinates)
-  
+        new_coords = [x * other for x in self.coordinates]
+        return Vector(*new_coords)
