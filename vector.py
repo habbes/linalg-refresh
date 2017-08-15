@@ -20,6 +20,12 @@ class Vector(object):
                 raise ValueError
             self.coordinates = tuple([Decimal(x) for x in coordinates])
             self.dimension = len(coordinates)
+            # check if 0 vector
+            self.is_zero = True
+            for c in self.coordinates:
+                if not c == Decimal(0):
+                    self.is_zero = False
+                    break
 
         except ValueError:
             raise ValueError('The coordinates must be nonempty')
@@ -63,6 +69,35 @@ class Vector(object):
             return theta
         else:
             return math.degrees(theta)
+
+    def is_orthogonal_to(self, other):
+        """Checks whether two vectors are orthogonal"""
+        if self.is_zero or other.is_zero:
+            return True
+        return self * other == Decimal(0)
+
+    def is_parallel_to(self, other):
+        """Checks whether two vectors are parallel"""
+        # return True for 0 vector
+        if self.is_zero or other.is_zero:
+            return True
+        # check if common factor exist between
+        # all coordinate pairs, more efficient
+        # than checking angle or normalized magnitudes
+        factor = None
+        for x, y in zip(self.coordinates, other.coordinates):
+            # special case for 0, to avoid division errors
+            if x == 0 and y == 0:
+                continue
+            if x == 0 or y == 0:
+                return False
+            if factor is None: # first non-zero elements
+                factor = y / x
+                continue
+            # subsequent elements
+            if not y / x == factor:
+                return False
+        return True
 
     def __str__(self):
         return 'Vector: {}'.format(self.coordinates)
