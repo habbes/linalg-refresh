@@ -105,6 +105,8 @@ class Vector(object):
         u_basis = basis.normalize()
         return (self * u_basis) * u_basis
 
+    component_parallel_to = project_on
+
     def component_orthogonal_to(self, basis):
         """Computes the vector component of self that
         is orthogonal to the specified basis vector"""
