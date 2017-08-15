@@ -50,10 +50,14 @@ class Vector(object):
             return self.dot(other)
         raise TypeError
 
-    def angle(self, other):
+    def angle(self, other, degrees=False):
         """Computes the angle between two vectors
         acos(v dot w/||v||*||w||)"""
-        return math.acos(self.normalize() * other.normalize())
+        theta = math.acos(self.normalize() * other.normalize())
+        if not degrees:
+            return theta
+        else:
+            return math.degrees(theta)
 
     def __str__(self):
         return 'Vector: {}'.format(self.coordinates)
