@@ -112,8 +112,31 @@ class Vector(object):
         is orthogonal to the specified basis vector"""
         return self - self.project_on(basis)
 
+    def cross(self, other):
+        """Computes the cross product"""
+        if self.dimension > 3 or other.dimension > 3:
+            raise Exception("Cross product not supported beyond 3D")
+        return Vector(
+            (self[1] * other[2]) - (self[2] * other[1]),
+            -((self[0] * other[2]) - (self[2] * other[0])),
+            (self[0] * other[1]) - (self[1] * other[0])
+        )
+
+    def parallelogram_area_with(self, other):
+        """Computes the area of the parallegogram spanned
+        by two vectors"""
+        return self.cross(other).magnitude()
+
+    def triangle_area_with(self, other):
+        """Computes the area of the triangle
+        spanned by two vectors"""
+        return self.parallelogram_area_with(other) / 2
+
     def __str__(self):
         return 'Vector: {}'.format(self.coordinates)
+
+    def __getitem__(self, key):
+        return self.coordinates[key]
 
     def __eq__(self, v):
         return self.coordinates == v.coordinates
