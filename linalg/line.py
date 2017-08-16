@@ -1,14 +1,14 @@
 """
 line module
 """
-from mydecimal import MyDecimal
-
-from vector import Vector
+from .mydecimal import MyDecimal as Decimal
+from .vector import Vector
 
 
 class Line(object):
     """Represents a line"""
     NO_NONZERO_ELTS_FOUND_MSG = 'No nonzero elements found'
+    PARALLEL_OR_COINCIDENT = 'The lines are parallel or coincident'
 
     def __init__(self, normal_vector=None, constant_term=None):
         self.dimension = 2
@@ -114,13 +114,35 @@ class Line(object):
         # to one of them
         return v.is_orthogonal_to(self.normal_vector)
 
+    __eq__ = is_equal_to
 
+    def intersection_with(self, other):
+        """Returns the point vector of intersection
+        between two lines if the lines have 1 intersection.
+        Assumes 2D"""
+        if self == other:
+            raise SameLineError
+        if self.is_parallel_to(other):
+            raise NoIntersectionError
+        a, b = self.normal_vector.coordinates
+        k1 = self.constant_term
+        c, d = other.normal_vector.coordinates
+        k2 = other.constant_term
+        x = (d * k1 - b * k2)/(a*d - b*c)
+        y = (-c * k1 + a * k2)/(a*d - b*c)
+        return Vector(x, y)
 
     @staticmethod
     def first_nonzero_index(iterable):
         """Finds the index of the first nonzero
         element in the sequence"""
         for k, item in enumerate(iterable):
-            if not MyDecimal(item).is_near_zero():
+            if not Decimal(item).is_near_zero():
                 return k
         raise Exception(Line.NO_NONZERO_ELTS_FOUND_MSG)
+
+class SameLineError(Exception):
+    pass
+
+class NoIntersectionError(Exception):
+    pass
