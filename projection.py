@@ -1,6 +1,6 @@
 # Projection
 
-from vector import Vector
+from linalg.vector import Vector
 
 v = Vector('3.039', '1.879')
 b = Vector('0.825', '2.036')

@@ -1,7 +1,7 @@
 """
 line module
 """
-from mydecimal import Decimal
+from mydecimal import MyDecimal
 
 from vector import Vector
 
@@ -32,12 +32,13 @@ class Line(object):
             n = self.normal_vector
             c = self.constant_term
             basepoint_coords = ['0']*self.dimension
-
+            # find nonzero coefficient
             initial_index = Line.first_nonzero_index(n)
             initial_coefficient = n[initial_index]
-
+            # basepoint has 0's expect for the selected
+            # coefficient index
             basepoint_coords[initial_index] = c/initial_coefficient
-            self.basepoint = Vector(basepoint_coords)
+            self.basepoint = Vector(*basepoint_coords)
 
         except Exception as e:
             if str(e) == Line.NO_NONZERO_ELTS_FOUND_MSG:
@@ -90,6 +91,29 @@ class Line(object):
         output += ' = {}'.format(constant)
 
         return output
+
+    def is_parallel_to(self, other):
+        """Check whether two lines are parallel"""
+        return self.normal_vector.is_parallel_to(other.normal_vector)
+
+    def is_equal_to(self, other):
+        """Checks whether the two lines coincident
+        i.e. consist of the same set of points"""
+        # coincident lines must be parallel
+        if not self.is_parallel_to(other):
+            return False
+        # find point on this line
+        p1 = self.basepoint
+        # find point on other line
+        p2 = other.basepoint
+        # find vector between p1 and p2
+        v = p1 - p2
+        # vector between the lines must be
+        # orthogonal to each line's normal vector
+        # it suffices to check if it's orthogonal
+        # to one of them
+        return v.is_orthogonal_to(self.normal_vector)
+
 
 
     @staticmethod

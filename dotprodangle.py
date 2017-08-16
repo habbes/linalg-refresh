@@ -1,6 +1,6 @@
 # Dot product and angle between vectors
 import math
-from vector import Vector
+from linalg.vector import Vector
 
 # Dot product
 v1 = Vector(7.887, 4.138)

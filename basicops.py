@@ -1,4 +1,4 @@
-from vector import Vector
+from linalg.vector import Vector
 
 # 1. addition
 v1 = Vector(8.218, -9.341)

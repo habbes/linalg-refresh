@@ -1,6 +1,6 @@
 # Magnitude and direction
 
-from vector import Vector
+from linalg.vector import Vector
 
 # Magnitude
 v = Vector('-0.221', '7.437')

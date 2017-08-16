@@ -1,6 +1,6 @@
 # Orthogonal and parallel vectors
 
-from vector import Vector
+from linalg.vector import Vector
 
 v = Vector('-7.579', '-7.88')
 w = Vector('22.737', '23.64')
