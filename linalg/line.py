@@ -120,6 +120,9 @@ class Line(object):
         """Returns the point vector of intersection
         between two lines if the lines have 1 intersection.
         Assumes 2D"""
+        # it would be more efficient check whether
+        # lines are the same only when zero division
+        # error occurs
         if self == other:
             raise SameLineError
         if self.is_parallel_to(other):
