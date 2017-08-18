@@ -51,6 +51,8 @@ class LinearSystem(object):
         )
     
     def compute_triangular_form(self):
+        """Returns a version of this system
+        in triangular form"""
         s = deepcopy(self)
         leading_idx = s.indices_of_first_nonzero_terms_in_each_row()
         for row in range(len(s.planes)):
@@ -81,6 +83,28 @@ class LinearSystem(object):
                         if str(e) == Plane.NO_NONZERO_ELTS_FOUND_MSG:
                             leading_idx[other] = -1
         return s
+
+    def compute_rref(self):
+        """Returns a version of this system in row-reduced
+        echelon form"""
+        tf = self.compute_triangular_form()
+        # reduce the rows from bottom to top
+        for row in range(min(tf.dimension, len(tf.planes)) - 1, -1, -1):
+            coef = tf.planes[row].normal_vector[row]
+            print("coef", coef)
+            # if the leading var has a non-0 coefficient
+            # reduce its coefficient to 1
+            if MyDecimal(coef).is_near_zero():
+                continue
+            if not coef == 1:
+                tf.multiply_coefficient_and_row(Decimal(1/coef), row)
+            # eliminate this var in all rows above
+            for other in range(0, row):
+                other_coef = tf.planes[other].normal_vector[row]
+                if not MyDecimal(other_coef).is_near_zero():
+                    tf.add_multiple_times_row_to_row(-other_coef,
+                        row, other)       
+        return tf
 
     def indices_of_first_nonzero_terms_in_each_row(self):
         num_equations = len(self)
