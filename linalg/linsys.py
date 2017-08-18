@@ -36,17 +36,19 @@ class LinearSystem(object):
     def multiply_coefficient_and_row(self, coefficient, row):
         """Multiplies the row at the specified index by the coeffiecient"""
         p = self.planes[row]
-        p.normal_vector = coefficient * p.normal_vector
-        p.constant_term = coefficient * p.constant_term
+        # create new plane instead of mutating so that the basepoint
+        # can be properly set
+        self.planes[row] = Plane(coefficient * p.normal_vector,
+            coefficient * p.constant_term)
 
     def add_multiple_times_row_to_row(self, coefficient, row_to_add, row_to_be_added_to):
         """Adds the multiple of a row to another row in the system"""
-        source = deepcopy(self.planes[row_to_add])
-        target = self.planes[row_to_be_added_to]
-        source.normal_vector = coefficient * source.normal_vector
-        source.constant_term = coefficient * source.constant_term
-        target.normal_vector = target.normal_vector + source.normal_vector
-        target.constant_term = target.constant_term + source.constant_term
+        p1 = self.planes[row_to_add]
+        p2 = self.planes[row_to_be_added_to]
+        self.planes[row_to_be_added_to] = Plane(
+            p2.normal_vector + (coefficient * p1.normal_vector),
+            p2.constant_term + (coefficient * p1.constant_term)
+        )
 
     def indices_of_first_nonzero_terms_in_each_row(self):
         num_equations = len(self)
