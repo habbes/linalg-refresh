@@ -29,18 +29,24 @@ class LinearSystem(object):
         except AssertionError:
             raise Exception(self.ALL_PLANES_MUST_BE_IN_SAME_DIM_MSG)
 
-
     def swap_rows(self, row1, row2):
-        pass # add your code here
-
+        """Swaps two rows in the system"""
+        self.planes[row1], self.planes[row2] = self.planes[row2], self.planes[row1]
 
     def multiply_coefficient_and_row(self, coefficient, row):
-        pass # add your code here
-
+        """Multiplies the row at the specified index by the coeffiecient"""
+        p = self.planes[row]
+        p.normal_vector = coefficient * p.normal_vector
+        p.constant_term = coefficient * p.constant_term
 
     def add_multiple_times_row_to_row(self, coefficient, row_to_add, row_to_be_added_to):
-        pass # add your code here
-
+        """Adds the multiple of a row to another row in the system"""
+        source = deepcopy(self.planes[row_to_add])
+        target = self.planes[row_to_be_added_to]
+        source.normal_vector = coefficient * source.normal_vector
+        source.constant_term = coefficient * source.constant_term
+        target.normal_vector = target.normal_vector + source.normal_vector
+        target.constant_term = target.constant_term + source.constant_term
 
     def indices_of_first_nonzero_terms_in_each_row(self):
         num_equations = len(self)

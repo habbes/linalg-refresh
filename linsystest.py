@@ -22,3 +22,17 @@ print(s)
 
 print(MyDecimal('1e-9').is_near_zero())
 print(MyDecimal('1e-11').is_near_zero())
+
+print("== Row operations ==")
+s2 = LinearSystem([
+    Plane(Vector(1, 0, 1), 2),
+    Plane(Vector(2, 4, 1), 3),
+    Plane(Vector(3, 4, 10, 2))
+])
+print(s2)
+s2.swap_rows(0, 1)
+print(s2)
+s2.multiply_coefficient_and_row(2, 0)
+print(s2)
+s2.add_multiple_times_row_to_row(2, 1, 2)
+print(s2)

@@ -104,7 +104,10 @@ class Plane(object):
         v = p1 - p2
         return v.is_orthogonal_to(self.normal_vector)
 
-    __eq__ = is_equal_to
+    # __eq__ = is_equal_to
+    def __eq__(self, other):
+        return self.normal_vector == other.normal_vector and  \
+        self.constant_term == other.constant_term
 
     @staticmethod
     def first_nonzero_index(iterable):
