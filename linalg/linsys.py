@@ -49,6 +49,38 @@ class LinearSystem(object):
             p2.normal_vector + (coefficient * p1.normal_vector),
             p2.constant_term + (coefficient * p1.constant_term)
         )
+    
+    def compute_triangular_form(self):
+        s = deepcopy(self)
+        leading_idx = s.indices_of_first_nonzero_terms_in_each_row()
+        for row in range(len(s.planes)):
+            # if leading column at this row has 0 coefficient
+            # swap with the first row below that has a non-zero
+            # coefficient at the leading column of this row
+            if not leading_idx[row] == row:
+                try:
+                    row_to_swap = leading_idx.index(row, row)
+                except ValueError as e:
+                    # there's no row where this var is a leading term
+                    continue
+                s.swap_rows(row, row_to_swap)
+                leading_idx[row], leading_idx[row_to_swap] = \
+                    leading_idx[row_to_swap], leading_idx[row]
+            # eliminate the leading term at this row in the rows
+            # below
+            for other in range(row + 1, len(s.planes)):
+                cur_c = s.planes[row].normal_vector[row]
+                other_c = s.planes[other].normal_vector[row]
+                if not other_c == 0:
+                    m = - (other_c / cur_c)
+                    s.add_multiple_times_row_to_row(m, row, other)
+                    try:
+                        leading_idx[other] = \
+                            Plane.first_nonzero_index(s.planes[other].normal_vector)
+                    except Exception as e:
+                        if str(e) == Plane.NO_NONZERO_ELTS_FOUND_MSG:
+                            leading_idx[other] = -1
+        return s
 
     def indices_of_first_nonzero_terms_in_each_row(self):
         num_equations = len(self)
